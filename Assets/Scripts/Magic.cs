@@ -20,6 +20,9 @@ public class Magic : MonoBehaviour
     private Vector3 rightHandValid;
     private Vector3 lastPosition;
 
+    private Vector3 LastLeftHand;
+    private Vector3 LastRightHand;
+
     [Tooltip("Hand distance to init Kame Hame Ha.")]
     [Range(0f, 5f)]
     public float HandDistance = 0.1f;
@@ -87,20 +90,14 @@ public class Magic : MonoBehaviour
 
     private void FixedUpdate()
     {
-
-
         // Measure the distance between both palms
         distance = Vector3.Distance(leftHandValid, rightHandValid);
-       // _DistanceText.text = "Distance: " + String.Format("{0:0.00}", distance);
-
+        _DistanceText.text = "Distance: " + String.Format("{0:0.00}", distance);
         // limit kame hame size
         if (distance > _kameHameMaxSize)
         {
             distance = _kameHameMaxSize;
         }
-
-
-
         bool validPosition = false;
         if (isValidController(OVRInput.Controller.LTouch))
         {
@@ -116,28 +113,27 @@ public class Magic : MonoBehaviour
         {
             Vector3 middlePosition = CenterOfVectors(new Vector3[] { LeftHand.transform.position, RightHand.transform.position });
             middlePosition = new Vector3(middlePosition.x, middlePosition.y + _kameHameHaPosition, middlePosition.z);
-           // Vector3 midway =CenterOfVectors( new Vector3[] { middleLeft, middleRight });
-            Vector3 midway = CenterOfVectors(new Vector3[] { LeftHand.transform.forward, -RightHand.transform.forward });
- 
-            //  Vector3 midway = -LeftHand.transform.forward + RightHand.transform.forward;
-            // Debug.Log("Current effect position: " + middlePosition);
-            // Debug.Log("left hand position: " + leftHandValid);
-            // Debug.Log("right hand position: " + rightHandValid);
-            // kame hame firing
-            // The distance is less than 0.1 and no magic is generated.
-            if (distance < HandDistance && currentKame == null)
+            float speed = Vector3.Distance( lastPosition, middlePosition  ) / Time.deltaTime;
+            Vector3 midway = CenterOfVectors(new Vector3[] { LeftHand.transform.forward, -RightHand.transform.forward, LastLeftHand, LastRightHand });
+            
+            //update previous positions
+            lastPosition = middlePosition;
+            LastLeftHand = LeftHand.transform.forward;
+            LastRightHand = -RightHand.transform.forward;
+
+            _aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
+
+
+            if (distance > HandDistance*0.5f && distance < HandDistance && currentKame == null)
             {
                 CreateEffect();
             }
             if (currentKame)
             {
                 SizeMagic(middlePosition);
-                ShootKame(midway);
+                ShootKame(midway, speed);
             }
         }
-
-
-
     }
 
     private bool isValidController(OVRInput.Controller controller)
@@ -204,28 +200,19 @@ public class Magic : MonoBehaviour
 
     }
 
-    private void ShootKame(Vector3 middlePosition)
+    private void ShootKame(Vector3 middlePosition, float speed)
     {
 
-
-      //  Vector3 midway = -LeftHand.transform.forward +RightHand.transform.forward;
-
-        float speed = Vector3.Distance( lastPosition, middlePosition  ) / Time.deltaTime;
-        lastPosition = middlePosition;
-
-        _aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
-        
         if (speed > handIntensityToShoot && speed <= handMaxIntensity)
         {
             float launchSpeed = Mathf.InverseLerp(handIntensityToShoot, handMaxIntensity, speed);
-            _DistanceText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
-
+           // _DistanceText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
             AudioSourceKame.Stop();
             AudioSourceKame.clip = Launch;
             AudioSourceKame.loop = false;
             float pitch = Mathf.Lerp(0.5f, 2.5f, launchSpeed);
             float SpeedKame = Mathf.Lerp(0, shootMaxIntensity, launchSpeed);
-            _hitsText.text = "SpeedKame: " + String.Format("{0:0.00}", SpeedKame);
+            _hitsText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
 
             AudioSourceKame.pitch = pitch;
             currentKame.GetComponent<KameHameHa>().Velocity = launchSpeed;

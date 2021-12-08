@@ -19,8 +19,11 @@ public class csShurikenEffectEditor : EditorWindow
 	public static void Init()
 	{
         myWindow = EditorWindow.GetWindowWithRect<csShurikenEffectEditor>(new Rect(100, 100, 300, 220)); //set Editor Position and Size
-		myWindow.title = "Scale Editor";
-	}
+        GUIContent content = new GUIContent();
+        content.text = "Scale Editor";
+        myWindow.titleContent = content;
+
+    }
 
     void OnGUI()
     {

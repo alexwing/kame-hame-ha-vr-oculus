@@ -30,6 +30,6 @@ Lead Motion version in https://github.com/alexwing/kame-hame-ha-vr
 
 ## Requirements
 
-* Unity 2021.1.15f1
+* Unity 2021.2.5f1
 * Oculus Quest 2
 
