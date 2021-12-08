@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class FlyLeapController : MonoBehaviour
+public class FlyController : MonoBehaviour
 {
 
     [Header("Hands")]

@@ -12,6 +12,10 @@ Lead Motion version in https://github.com/alexwing/kame-hame-ha-vr
 
 ## Updates
 
+- Simple but effective script to detect gestures for Oculus Quest, although in theory it would work for any system.
+    Previously you create the gesture, press a key and it is added to a list with the rest of the gestures and you assign a name to it.
+    Later in the game, it verifies the hand positions with the saved ones, until they match (taking into account a margin of error that can be configured).
+
 - The Kame Hame Ha has a speed proportional to the impulse of the hands.
 - The explosion of the lunar terrain was previously done with a bitmap brush, now I use a revolutionized beizer curve, so it has gained precision and customization capacity.
 - The size of the terrain of destruction and explosions depends on the size and speed of the kame hame ha.
