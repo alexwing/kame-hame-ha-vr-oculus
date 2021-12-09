@@ -11,6 +11,9 @@ public class FlyController : MonoBehaviour
     [SerializeField] private Transform _MoveGestoureAnchor;
 
 
+    [Header("Score")]
+    [SerializeField] private TMPro.TextMeshPro _MoveScoreText;
+
     [Header("Player")]
     public float rotationSpeed = 5f;       // Rotation speed.
     public static bool HandStateRight = false;
@@ -23,22 +26,22 @@ public class FlyController : MonoBehaviour
 
     public void HandRightClosed()
     {
-        HandStateRight = true;
+        HandStateRight = false;
 
     }
     public void HandRightOpened()
     {
-        HandStateRight = false;
+        HandStateRight = true;
     }
 
     public void HandLeftClosed()
     {
-        HandStateLeft = true;
+        HandStateLeft = false;
 
     }
     public void HandLeftOpened()
     {
-        HandStateLeft = false;
+        HandStateLeft = true;
     }
 
     private void Update()
@@ -49,7 +52,8 @@ public class FlyController : MonoBehaviour
     }
     private void GestureRotation()
     {
-        float distance = Vector3.Distance(_leftHand.position, _RotationGestoureAnchor.position);
+        //float distance = Vector3.Distance(_leftHand.position, _RotationGestoureAnchor.position);
+         float distance = Vector3.Distance(new Vector3(_leftHand.position.x,0,0), new Vector3(_RotationGestoureAnchor.position.x,0,0));
         float rotateInfluence;
 
         if (!Utils.IsFrontAtObject(_RotationGestoureAnchor, _leftHand))
@@ -67,22 +71,26 @@ public class FlyController : MonoBehaviour
     private void PlayerMovement()
     {
 
-        float distance = Vector3.Distance(_rightHand.position, _MoveGestoureAnchor.position);
+        //float distance = Vector3.Distance(_rightHand.position, _MoveGestoureAnchor.position);
+        float distance = Vector3.Distance(new Vector3(0,0,_rightHand.position.z), new Vector3(0,0,_MoveGestoureAnchor.position.z));
         float moveInfluence;
 
-        if (!Utils.IsFrontAtObject(_MoveGestoureAnchor, _rightHand))
+        if (Utils.IsFrontAtObject(_MoveGestoureAnchor, _rightHand))
         {
-            moveInfluence = distance * Time.deltaTime * rotationSpeed;
+            _MoveScoreText.text = "Move fordward: " + distance.ToString("F2");
+            moveInfluence = distance;
         }
         else
         {
-            moveInfluence = -distance * Time.deltaTime * rotationSpeed;
+            _MoveScoreText.text = "Move backward: " + distance.ToString("F2");
+            moveInfluence = -distance;
         }
 
         float CurrentSpeed = Mathf.Min(mainSpeed * moveInfluence * (forceMagnitude + Time.deltaTime), maxSpeed);
 
         Vector3 movement = Camera.main.transform.forward * CurrentSpeed;
         GetComponent<Rigidbody>().AddForce(movement);
+      //  GetComponent<OVRPlayerController>().Jump();
 
 
 

@@ -10,6 +10,7 @@ public struct Gesture
     public string name;
     public List<Vector3> fingerDatas;
     public UnityEvent onRecognized;
+    public UnityEvent onRecognitionEnded;
 
 
 }
@@ -39,16 +40,39 @@ public class OculusGestoureController : MonoBehaviour
         {
             save();
         }
+        //get current gesture
         Gesture currentGesture = Reconized();
         bool hasRecognized = !currentGesture.Equals(new Gesture());
-        //check if is new gesture
-        if (!hasRecognized && !currentGesture.Equals(previousGesture))
+        //check gesture status
+        if (hasRecognized && !currentGesture.name.Equals(previousGesture.name))
         {
             Debug.Log("New gesture found: " + currentGesture.name);
-         //   _GestureScoreText.text = "Gesture: " + currentGesture.name;
+            //   _GestureScoreText.text = "Gesture: " + currentGesture.name;
+            if (!previousGesture.Equals(new Gesture()))
+            {
+                _GestureScoreText.text = "GestureEnd: " + previousGesture.name;
+                if (previousGesture.onRecognitionEnded != null)
+                {
+                    previousGesture.onRecognitionEnded.Invoke();
+                }
+            }
             previousGesture = currentGesture;
-            currentGesture.onRecognized.Invoke();
+            _GestureScoreText.text = "Gesture: " + currentGesture.name;
+            if (currentGesture.onRecognized != null)
+            {
+                currentGesture.onRecognized.Invoke();
+            }            
         }
+        if (!hasRecognized && !previousGesture.Equals(new Gesture()))
+        {
+            _GestureScoreText.text = "GestureEnd: " + previousGesture.name;
+            if (previousGesture.onRecognitionEnded != null)
+            {
+                previousGesture.onRecognitionEnded.Invoke();
+            }            
+            previousGesture = new Gesture();
+        }
+
     }
 
     void save()
@@ -59,7 +83,7 @@ public class OculusGestoureController : MonoBehaviour
         List<Vector3> data = new List<Vector3>();
         foreach (OVRBone bone in fingerBones)
         {
-          //  Debug.Log("bone: " + bone.Id);
+            //  Debug.Log("bone: " + bone.Id);
             data.Add(skeleton.transform.InverseTransformPoint(bone.Transform.position));
         }
         g.fingerDatas = data;
@@ -81,7 +105,7 @@ public class OculusGestoureController : MonoBehaviour
                 float distance = Vector3.Distance(currentData, gesture.fingerDatas[i]);
                 if (distance > threshold)
                 {
-                   // Debug.Log("bone: " + fingerBones[i].Id + " distance: " + distance);
+                    // Debug.Log("bone: " + fingerBones[i].Id + " distance: " + distance);
                     isdiscarded = true;
                     break;
                 }
@@ -93,12 +117,7 @@ public class OculusGestoureController : MonoBehaviour
             {
                 //currentMin = sumDistance;
                 currentGesture = gesture;
-                 Debug.Log("New gesture found2: " + currentGesture.name);
-                _GestureScoreText.text = "Gesture: " + currentGesture.name;
-                break;
-            }
-            else{
-                _GestureScoreText.text = "";
+                Debug.Log("New gesture found2: " + currentGesture.name);
             }
 
         }
