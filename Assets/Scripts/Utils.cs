@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,9 @@ public class Utils
 
 
     private static string androidInternalFilesDir = null;
+    private static float clicked = 0;
+    private static float clicktime = 0;
+    private static float clickdelay = 0.5f;
 
     // Start is called before the first frame update
     public static float StringToFloat(string Value)

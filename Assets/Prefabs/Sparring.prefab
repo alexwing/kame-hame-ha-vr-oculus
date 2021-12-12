@@ -11,11 +11,7 @@ GameObject:
   - component: {fileID: 3185913658836592601}
   - component: {fileID: 698890703259502636}
   - component: {fileID: 698890703259502637}
-  - component: {fileID: 879989732}
-  - component: {fileID: 879989733}
   - component: {fileID: 1904312295}
-  - component: {fileID: 1904312292}
-  - component: {fileID: 1904312294}
   m_Layer: 0
   m_Name: Sparring
   m_TagString: Untagged
@@ -76,43 +72,6 @@ MonoBehaviour:
   FrameRate: 1
   clip: {fileID: 8300000, guid: 8f03951fee9bec9478d1ec979ba44677, type: 3}
   DistanceSoundLimit: 500
---- !u!114 &879989732
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2845557238061694307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e894e8275265184a84c1d6d8e9cab60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  snapTime: 5
-  interactable: 0
---- !u!114 &879989733
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2845557238061694307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd49945bfbbf8a4690efc6401b0760f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 5882841009616399822}
-  _original: {fileID: 2100000, guid: 07553007ceddacc47bac6a131f3dc619, type: 2}
-  _hit: {fileID: 2100000, guid: 8ce7ebaae88fe3044989871ba74c5d86, type: 2}
-  currentDetonator: {fileID: 100004, guid: 2e30c8faef924a24092d82bc1255e5ff, type: 3}
-  explosionLife: 18
-  _restoreTime: 5
-  detailLevel: 1
-  ramdomExplosion: 0.22
-  FrameRate: 1
-  clip: {fileID: 8300000, guid: 8f03951fee9bec9478d1ec979ba44677, type: 3}
-  DistanceSoundLimit: 500
 --- !u!54 &1904312295
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -129,43 +88,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &1904312292
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2845557238061694307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e894e8275265184a84c1d6d8e9cab60, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  snapTime: 5
-  interactable: 0
---- !u!114 &1904312294
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2845557238061694307}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bd49945bfbbf8a4690efc6401b0760f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _meshRenderer: {fileID: 5882841009616399822}
-  _original: {fileID: 2100000, guid: 07553007ceddacc47bac6a131f3dc619, type: 2}
-  _hit: {fileID: 2100000, guid: 8ce7ebaae88fe3044989871ba74c5d86, type: 2}
-  currentDetonator: {fileID: 100004, guid: 2e30c8faef924a24092d82bc1255e5ff, type: 3}
-  explosionLife: 18
-  _restoreTime: 5
-  detailLevel: 1
-  ramdomExplosion: 0.22
-  FrameRate: 1
-  clip: {fileID: 8300000, guid: 8f03951fee9bec9478d1ec979ba44677, type: 3}
-  DistanceSoundLimit: 500
 --- !u!1 &4562339989772720818
 GameObject:
   m_ObjectHideFlags: 0

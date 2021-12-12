@@ -27,14 +27,28 @@ namespace GestureRecognizer
             previousGesture = new Gesture();
         }
 
+
+        public void SetActiveHands(bool active)
+        {
+            SkinnedMeshRenderer pathToHand = skeleton.GetComponentInChildren<SkinnedMeshRenderer>();            
+            if (pathToHand)
+            {
+                pathToHand.enabled = active;
+            }
+ 
+        }
+
         // Update is called once per frame
         void Update()
         {
             //is valid position
             if (!OVRInput.GetControllerOrientationTracked(controller))
             {
+                //_GestureScoreText.text = controller + " Disabled";
+                SetActiveHands(false);
                 return;
             }
+            SetActiveHands(true);
             if (debugMode && Input.GetKeyDown(KeyCode.Space))
             {
                 save();
@@ -96,8 +110,9 @@ namespace GestureRecognizer
             Gesture currentGesture = new Gesture();
             float currentMin = float.MaxValue;
             foreach (Gesture gesture in gestures)
-            { 
-                if (!gesture.active){
+            {
+                if (!gesture.active)
+                {
                     continue;
                 }
                 float sumDistance = 0;
