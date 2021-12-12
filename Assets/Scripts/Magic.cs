@@ -11,8 +11,8 @@ public class Magic : MonoBehaviour
 {
     public static Magic instance;
 
-    public GameObject LeftHand;
-    public GameObject RightHand;
+    public GameObject LeftKameAnchor;
+    public GameObject RightKameAnchor;
 
     public GameObject LeftHandAnchor;
     public GameObject RightHandAnchor;
@@ -26,11 +26,11 @@ public class Magic : MonoBehaviour
     private Vector3 LastLeftHand;
     private Vector3 LastRightHand;
 
+    [Header("Kame Hame Ha")]
     [Tooltip("Hand distance to init Kame Hame Ha.")]
     [Range(0f, 5f)]
     public float HandDistance = 0.1f;
 
-    [Header("Kame Hame Ha")]
     [Tooltip("Destroy distance from camera")]
     [Range(0f, 10000f)]
     public float _destroyDistance = 1000f;
@@ -49,10 +49,13 @@ public class Magic : MonoBehaviour
     [Tooltip("Hands max intensity.")]
     [Range(0f, 100f)]
     public float handMaxIntensity = 10f;
-    [Tooltip("Velocity max kame.")]
-    [Range(0, 1000000)]
-    public int shootMaxIntensity = 10000;
+    [Tooltip("Velocity min kame.")]
+    [Range(0, 500000)]
+    public int shootMinVelocity = 10000;
 
+    [Tooltip("Velocity max kame.")]
+    [Range(0, 500000)]
+    public int shootMaxVelocity = 10000;
 
     [Header("Effect")]
     [SerializeField] private Transform[] _magicArray;
@@ -70,11 +73,8 @@ public class Magic : MonoBehaviour
     public AudioSource AudioSourceKame;
     public AudioClip Create;
     public AudioClip Launch;
-
-
     private float _shotCount;
     public static float _hitCount;
-
     private static bool kameLeftHand = false;
     private static bool kameRightHand = false;
 
@@ -95,15 +95,11 @@ public class Magic : MonoBehaviour
         kameRightHand = false;
     }
 
-
-
-
     void Awake()
     {
         instance = this;
         //OVRCameraRig 
         SceneConfig.MainCamera = GameObject.Find("OVRCameraRig").transform;
-
     }
 
     void Start()
@@ -111,12 +107,10 @@ public class Magic : MonoBehaviour
         _magicParticleList = new List<ParticleSystem>();
         _shotCount = 0;
         _hitCount = 0;
-
     }
 
     private void FixedUpdate()
     {
-
         // Measure the distance between both palms
         distance = Vector3.Distance(leftHandValid, rightHandValid);
         _DistanceText.text = "Distance: " + String.Format("{0:0.00}", distance);
@@ -138,33 +132,28 @@ public class Magic : MonoBehaviour
         }
         if (validPosition)
         {
-            Vector3 middlePosition = CenterOfVectors(new Vector3[] { LeftHand.transform.position, RightHand.transform.position });
+            Vector3 middlePosition = Utils.CenterOfVectors(new Vector3[] { LeftKameAnchor.transform.position, RightKameAnchor.transform.position });
             middlePosition = new Vector3(middlePosition.x, middlePosition.y + _kameHameHaPosition, middlePosition.z);
-
 
             //in futures oculus sdk this must works
             // Vector3 middlePositionVelocity = CenterOfVectors(new Vector3[] { OVRInput.GetLocalControllerVelocity((OVRInput.Controller.LTouch)), OVRInput.GetLocalControllerVelocity((OVRInput.Controller.RTouch)) });
-            Vector3 middlePositionVelocity = CenterOfVectors(new Vector3[] { LeftHandAnchor.transform.localPosition, RightHandAnchor.transform.localPosition });
+            Vector3 middlePositionVelocity = Utils.CenterOfVectors(new Vector3[] { LeftHandAnchor.transform.localPosition, RightHandAnchor.transform.localPosition });
+            
+            //float speed = Vector3.Distance( new Vector3(0,0,lastPosition.z), new Vector3(0,0,middlePosition.z)) / Time.deltaTime;
+            float speed = (middlePositionVelocity.z -lastPosition.z) / Time.deltaTime;
 
-            float speed = Vector3.Distance(lastPosition, middlePositionVelocity) / Time.deltaTime;
-            Vector3 midway = CenterOfVectors(new Vector3[] { LeftHand.transform.forward, -RightHand.transform.forward, LastLeftHand, LastRightHand });
+            //float speed = Vector3.Distance(lastPosition, middlePositionVelocity) / Time.deltaTime;
+            Vector3 midway = Utils.CenterOfVectors(new Vector3[] { LeftKameAnchor.transform.forward, -RightKameAnchor.transform.forward, LastLeftHand, LastRightHand });
 
             //only shoot if hands move to forward
-            if (Utils.IsFrontAtObject(LeftHandAnchor.transform, lastPosition) || Utils.IsFrontAtObject(RightHandAnchor.transform, lastPosition))
-            {
-                _aimPercentText.text = "isfront: " + speed;
-                
-            }else{
-                speed= 0;
-                _aimPercentText.text = "notfront: " + speed;
-            }
+            speed = speed < 0 ? 0 : speed;
+            
             //update previous positions
             lastPosition = middlePositionVelocity;
-            LastLeftHand = LeftHand.transform.forward;
-            LastRightHand = -RightHand.transform.forward;
+            LastLeftHand = LeftKameAnchor.transform.forward;
+            LastRightHand = -RightKameAnchor.transform.forward;
 
-           // _aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
-
+            //_aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
 
             if (distance > HandDistance * 0.5f && distance < HandDistance && currentKame == null)
             {
@@ -180,7 +169,6 @@ public class Magic : MonoBehaviour
                 SizeMagic(middlePosition);
                 ShootKame(midway, speed);
             }
-
         }
         else
         {
@@ -208,14 +196,12 @@ public class Magic : MonoBehaviour
 
     private void CreateEffect()
     {
-
         // Generated after determining the effect at random
         index = UnityEngine.Random.Range(0, _magicArray.Length);
         currentKame = Instantiate(_magicArray[index], _kames.transform);
         currentKame.name = "kamehameha";
         currentKame.transform.parent = _kames;
         currentKame.GetComponent<KameHameHa>().Distance = _destroyDistance;
-
 
         AudioSourceKame.clip = Create;
         AudioSourceKame.loop = true;
@@ -227,29 +213,14 @@ public class Magic : MonoBehaviour
         for (int i = 0; i < currentKame.childCount; i++)
             _magicParticleList.Add(currentKame.GetChild(i).GetComponent<ParticleSystem>());
     }
-    public Vector3 CenterOfVectors(Vector3[] vectors)
-    {
-        Vector3 sum = Vector3.zero;
-        if (vectors == null || vectors.Length == 0)
-        {
-            return sum;
-        }
 
-        foreach (Vector3 vec in vectors)
-        {
-            sum += vec;
-        }
-        return sum / vectors.Length;
-    }
     private void SizeMagic(Vector3 middlePosition)
     {
-
         AudioSourceKame.pitch = distance;
         currentKame.position = middlePosition;
         // Pull out multiple particles from the list and scale them
         for (int i = 0; i < _magicParticleList.Count; i++)
             _magicParticleList[i].transform.localScale = new Vector3(distance, distance, distance) * 0.1f;
-
     }
 
     private void DestroyKame()
@@ -264,28 +235,27 @@ public class Magic : MonoBehaviour
 
     private void ShootKame(Vector3 middlePosition, float speed)
     {
-
         if (speed > handIntensityToShoot && speed <= handMaxIntensity)
         {
+            _aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
             float launchSpeed = Mathf.InverseLerp(handIntensityToShoot, handMaxIntensity, speed);
+
+
             // _DistanceText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
             AudioSourceKame.Stop();
-            //AudioSourceKame.clip = Launch;
-            // AudioSourceKame.loop = false;
-            // float pitch = Mathf.Lerp(0.5f, 2.5f, launchSpeed);
-            float SpeedKame = Mathf.Lerp(0, shootMaxIntensity, launchSpeed);
-            _hitsText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
 
-            // AudioSourceKame.pitch = pitch;
+            Utils.PlaySound(Launch,currentKame,this.transform, 1000);
+            float SpeedKame = Mathf.Lerp(0, shootMaxVelocity, launchSpeed);
+            if (this.shootMinVelocity > SpeedKame)
+            {
+                SpeedKame = this.shootMinVelocity;
+            }
+            _hitsText.text = "launchSpeed: " + String.Format("{0:0.00}", SpeedKame);
             currentKame.GetComponent<KameHameHa>().Velocity = launchSpeed;
-            // AudioSourceKame.PlayOneShot(Launch);
             currentKame.GetComponent<KameHameHa>().Size = distance * 100 / _kameHameMaxSize;
             currentKame.GetComponent<Rigidbody>().AddForce(middlePosition * SpeedKame);
             currentKame = null;
             _shotCount++;
         }
     }
-
-
-
 }

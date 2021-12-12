@@ -391,7 +391,7 @@ public class Utils
         else
             return false;
 
-    }    
+    }
 
 
     public static String GetWifiMAC()
@@ -467,11 +467,11 @@ public class Utils
     public static Transform RandomNearPosition(Transform obj, float XRange, float YRange, float ZRange)
     {
 
-            obj.position = new Vector3(
-                Random.Range(obj.position.x - XRange, obj.position.x + XRange),
-                Random.Range(obj.position.y - YRange, obj.position.y + YRange),
-                Random.Range(obj.position.z - ZRange, obj.position.z + ZRange)
-                );
+        obj.position = new Vector3(
+            Random.Range(obj.position.x - XRange, obj.position.x + XRange),
+            Random.Range(obj.position.y - YRange, obj.position.y + YRange),
+            Random.Range(obj.position.z - ZRange, obj.position.z + ZRange)
+            );
 
         return obj;
     }
@@ -479,19 +479,31 @@ public class Utils
     public static void PlaySound(AudioClip clip, Transform collision, Transform player, int DistanceSoundLimit)
     {
         float cameraDistance = Vector3.Distance(player.position, collision.position);
-
-
         float normalizedValue = Mathf.InverseLerp(0, DistanceSoundLimit, cameraDistance);
         float explosionDistanceVolumen = Mathf.Lerp(1f, 0, normalizedValue);
         // First, calculate the direction to the spawn
-        Vector3 spawnDirection = collision.position - player.position;
-
+        Vector3 spawnDirection = collision.position - player.position;        
         // Then, normalize it into a unit vector
         Vector3 unitSpawnDirection = spawnDirection.normalized;
 
-        Debug.Log("Camera distance: " + cameraDistance + " explosion sound volumen : " + explosionDistanceVolumen);
+        // Debug.Log("Camera distance: " + cameraDistance + " explosion sound volumen : " + explosionDistanceVolumen);
         // Now, we can play the sound in the direction, but not position, of the spawn
         AudioSource.PlayClipAtPoint(clip, player.position + unitSpawnDirection, explosionDistanceVolumen);
+    }
+
+    public static Vector3 CenterOfVectors(Vector3[] vectors)
+    {
+        Vector3 sum = Vector3.zero;
+        if (vectors == null || vectors.Length == 0)
+        {
+            return sum;
+        }
+
+        foreach (Vector3 vec in vectors)
+        {
+            sum += vec;
+        }
+        return sum / vectors.Length;
     }
 
 }

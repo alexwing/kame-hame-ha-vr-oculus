@@ -17754,7 +17754,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2620228222752084058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.05, y: -0.13, z: 0.33}
+  m_LocalPosition: {x: 0, y: -0.13, z: 0.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17779,7 +17779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2620228223062821656
 Transform:
   m_ObjectHideFlags: 0
@@ -17869,7 +17869,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2620228223776721941}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.04, y: -0.13, z: 0.33}
+  m_LocalPosition: {x: 0, y: -0.13, z: 0.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17894,7 +17894,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2620228224155571346
 Transform:
   m_ObjectHideFlags: 0
@@ -20747,7 +20747,7 @@ MonoBehaviour:
   _RotationGestoureAnchor: {fileID: 2620228223776721942}
   _MoveGestoureAnchor: {fileID: 2620228222752084059}
   _MoveScoreText: {fileID: 836978533}
-  rotationSpeed: 135
+  rotationSpeed: 175
   mainSpeed: 15
   maxSpeed: 80
   forceMagnitude: 2.5
@@ -20922,8 +20922,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6823eeb31a3d67e4fac476852868ea5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LeftHand: {fileID: 1791932313592041}
-  RightHand: {fileID: 1008073498497217}
+  LeftKameAnchor: {fileID: 1791932313592041}
+  RightKameAnchor: {fileID: 1008073498497217}
   LeftHandAnchor: {fileID: 432959205}
   RightHandAnchor: {fileID: 654211503}
   _kames: {fileID: 1356447079}
@@ -20933,7 +20933,8 @@ MonoBehaviour:
   _kameHameHaPosition: 0
   handIntensityToShoot: 1
   handMaxIntensity: 2
-  shootMaxIntensity: 100000
+  shootMinVelocity: 15000
+  shootMaxVelocity: 50000
   _magicArray:
   - {fileID: 400004, guid: aeae58bf37a687647adec1a709ea4bd4, type: 3}
   - {fileID: 322934440827122803, guid: 7f4cd52014748b049b82f29f755c1278, type: 3}
@@ -20947,7 +20948,7 @@ MonoBehaviour:
   _DistanceText: {fileID: 1401285830}
   AudioSourceKame: {fileID: 4968531031404869577}
   Create: {fileID: 8300000, guid: 3eefe61359ea80b469796e4eebb3c81b, type: 3}
-  Launch: {fileID: 8300000, guid: 3eefe61359ea80b469796e4eebb3c81b, type: 3}
+  Launch: {fileID: 8300000, guid: 544892a4a1654ee419e21a9f3fff5b6f, type: 3}
 --- !u!1 &5342833014128341121
 GameObject:
   m_ObjectHideFlags: 0
