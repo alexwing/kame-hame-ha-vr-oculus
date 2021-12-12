@@ -53,9 +53,6 @@ public class Target : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-
-
-
         currentTime = 0;
         gameObject.GetComponent<TargetSnap>().interactable = true;
         //if (other.gameObject.name == "Terrain") return;
@@ -66,7 +63,6 @@ public class Target : MonoBehaviour
         {
             detonation(other);
             Magic._hitCount++;
-            Magic.instance.UpdatePercent();
 
             Destroy(other.gameObject);
         }           

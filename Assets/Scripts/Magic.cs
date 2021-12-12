@@ -13,6 +13,9 @@ public class Magic : MonoBehaviour
 
     public GameObject LeftHand;
     public GameObject RightHand;
+
+    public GameObject LeftHandAnchor;
+    public GameObject RightHandAnchor;
     [SerializeField] private Transform _kames;
 
     [Header("Hand")]
@@ -72,6 +75,29 @@ public class Magic : MonoBehaviour
     private float _shotCount;
     public static float _hitCount;
 
+    private static bool kameLeftHand = false;
+    private static bool kameRightHand = false;
+
+    public static void KameLeftOpened()
+    {
+        kameLeftHand = true;
+    }
+    public static void KameRightOpened()
+    {
+        kameRightHand = true;
+    }
+    public static void KameLeftClosed()
+    {
+        kameLeftHand = false;
+    }
+    public static void KameRightClosed()
+    {
+        kameRightHand = false;
+    }
+
+
+
+
     void Awake()
     {
         instance = this;
@@ -90,6 +116,7 @@ public class Magic : MonoBehaviour
 
     private void FixedUpdate()
     {
+
         // Measure the distance between both palms
         distance = Vector3.Distance(leftHandValid, rightHandValid);
         _DistanceText.text = "Distance: " + String.Format("{0:0.00}", distance);
@@ -113,19 +140,39 @@ public class Magic : MonoBehaviour
         {
             Vector3 middlePosition = CenterOfVectors(new Vector3[] { LeftHand.transform.position, RightHand.transform.position });
             middlePosition = new Vector3(middlePosition.x, middlePosition.y + _kameHameHaPosition, middlePosition.z);
-            float speed = Vector3.Distance( lastPosition, middlePosition  ) / Time.deltaTime;
+
+
+            //in futures oculus sdk this must works
+            // Vector3 middlePositionVelocity = CenterOfVectors(new Vector3[] { OVRInput.GetLocalControllerVelocity((OVRInput.Controller.LTouch)), OVRInput.GetLocalControllerVelocity((OVRInput.Controller.RTouch)) });
+            Vector3 middlePositionVelocity = CenterOfVectors(new Vector3[] { LeftHandAnchor.transform.localPosition, RightHandAnchor.transform.localPosition });
+
+            float speed = Vector3.Distance(lastPosition, middlePositionVelocity) / Time.deltaTime;
             Vector3 midway = CenterOfVectors(new Vector3[] { LeftHand.transform.forward, -RightHand.transform.forward, LastLeftHand, LastRightHand });
-            
+
+            //only shoot if hands move to forward
+            if (Utils.IsFrontAtObject(LeftHandAnchor.transform, lastPosition) || Utils.IsFrontAtObject(RightHandAnchor.transform, lastPosition))
+            {
+                _aimPercentText.text = "isfront: " + speed;
+                
+            }else{
+                speed= 0;
+                _aimPercentText.text = "notfront: " + speed;
+            }
             //update previous positions
-            lastPosition = middlePosition;
+            lastPosition = middlePositionVelocity;
             LastLeftHand = LeftHand.transform.forward;
             LastRightHand = -RightHand.transform.forward;
 
-            _aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
+           // _aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
 
 
-            if (distance > HandDistance*0.5f && distance < HandDistance && currentKame == null)
+            if (distance > HandDistance * 0.5f && distance < HandDistance && currentKame == null)
             {
+                if (!kameLeftHand || !kameRightHand)
+                {
+                    DestroyKame();
+                    return;
+                }
                 CreateEffect();
             }
             if (currentKame)
@@ -133,6 +180,11 @@ public class Magic : MonoBehaviour
                 SizeMagic(middlePosition);
                 ShootKame(midway, speed);
             }
+
+        }
+        else
+        {
+            DestroyKame();
         }
     }
 
@@ -200,54 +252,40 @@ public class Magic : MonoBehaviour
 
     }
 
+    private void DestroyKame()
+    {
+        AudioSourceKame.Stop();
+        if (currentKame)
+        {
+            Destroy(currentKame.gameObject);
+            currentKame = null;
+        }
+    }
+
     private void ShootKame(Vector3 middlePosition, float speed)
     {
 
         if (speed > handIntensityToShoot && speed <= handMaxIntensity)
         {
             float launchSpeed = Mathf.InverseLerp(handIntensityToShoot, handMaxIntensity, speed);
-           // _DistanceText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
+            // _DistanceText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
             AudioSourceKame.Stop();
-            AudioSourceKame.clip = Launch;
-            AudioSourceKame.loop = false;
-            float pitch = Mathf.Lerp(0.5f, 2.5f, launchSpeed);
+            //AudioSourceKame.clip = Launch;
+            // AudioSourceKame.loop = false;
+            // float pitch = Mathf.Lerp(0.5f, 2.5f, launchSpeed);
             float SpeedKame = Mathf.Lerp(0, shootMaxIntensity, launchSpeed);
             _hitsText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
 
-            AudioSourceKame.pitch = pitch;
+            // AudioSourceKame.pitch = pitch;
             currentKame.GetComponent<KameHameHa>().Velocity = launchSpeed;
-            AudioSourceKame.Play();
+            // AudioSourceKame.PlayOneShot(Launch);
             currentKame.GetComponent<KameHameHa>().Size = distance * 100 / _kameHameMaxSize;
-            currentKame.GetComponent<Rigidbody>().AddForce(middlePosition * SpeedKame);         
+            currentKame.GetComponent<Rigidbody>().AddForce(middlePosition * SpeedKame);
             currentKame = null;
             _shotCount++;
         }
     }
 
-    /// <summary>
-    /// Accuracy update
-    /// </summary>
-    public void UpdatePercent()
-    {
-        var percent = _hitCount / _shotCount * 100;
-
-       // _aimPercentText.text = "Hits: " + percent.ToString("F1") + "%";
-        //   _hitsText.text = "Hits: " + _hitCount ;
-    }
-
-    public void closed()
-    {
 
 
-        //_aimPercentText.text = "Closed";
-        //   _hitsText.text = "Hits: " + _hitCount ;
-    }
-
-    public void opened()
-    {
-
-
-//        _aimPercentText.text = "Open";
-        //   _hitsText.text = "Hits: " + _hitCount ;
-    }
 }

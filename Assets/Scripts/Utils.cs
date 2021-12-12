@@ -384,6 +384,14 @@ public class Utils
             return false;
 
     }
+    public static bool IsFrontAtObject(Transform obj1, Vector3 obj2)
+    {
+        if (Vector3.Dot(Vector3.forward, obj1.transform.InverseTransformPoint(obj2)) < 0)
+            return true;
+        else
+            return false;
+
+    }    
 
 
     public static String GetWifiMAC()
