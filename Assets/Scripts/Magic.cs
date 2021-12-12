@@ -11,6 +11,7 @@ public class Magic : MonoBehaviour
 {
     public static Magic instance;
 
+    public GameObject HeadAnchor;
     public GameObject LeftKameAnchor;
     public GameObject RightKameAnchor;
 
@@ -138,22 +139,32 @@ public class Magic : MonoBehaviour
             //in futures oculus sdk this must works
             // Vector3 middlePositionVelocity = CenterOfVectors(new Vector3[] { OVRInput.GetLocalControllerVelocity((OVRInput.Controller.LTouch)), OVRInput.GetLocalControllerVelocity((OVRInput.Controller.RTouch)) });
             Vector3 middlePositionVelocity = Utils.CenterOfVectors(new Vector3[] { LeftHandAnchor.transform.localPosition, RightHandAnchor.transform.localPosition });
-            
-            //float speed = Vector3.Distance( new Vector3(0,0,lastPosition.z), new Vector3(0,0,middlePosition.z)) / Time.deltaTime;
-            float speed = (middlePositionVelocity.z -lastPosition.z) / Time.deltaTime;
 
-            //float speed = Vector3.Distance(lastPosition, middlePositionVelocity) / Time.deltaTime;
+            //float speed = Vector3.Distance( new Vector3(0,0,lastPosition.z), new Vector3(0,0,middlePosition.z)) / Time.deltaTime;
+            //float speed = (middlePositionVelocity.z -lastPosition.z) / Time.deltaTime;
+
+            float speed = Vector3.Distance(lastPosition, middlePositionVelocity) / Time.deltaTime;
+
+            float distanceNow  =  Vector3.Distance(middlePositionVelocity, HeadAnchor.transform.localPosition);
+            float distanceLast = Vector3.Distance(lastPosition, HeadAnchor.transform.localPosition);
+            
+            //only shoot if hands move to forward
+            if (distanceNow <= distanceLast)
+            {
+                speed = 0;
+            }
+
+
             Vector3 midway = Utils.CenterOfVectors(new Vector3[] { LeftKameAnchor.transform.forward, -RightKameAnchor.transform.forward, LastLeftHand, LastRightHand });
 
-            //only shoot if hands move to forward
-            speed = speed < 0 ? 0 : speed;
-            
+
+           // _aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
+
             //update previous positions
             lastPosition = middlePositionVelocity;
             LastLeftHand = LeftKameAnchor.transform.forward;
             LastRightHand = -RightKameAnchor.transform.forward;
 
-            //_aimPercentText.text = "Speed: " + String.Format("{0:0.00}", speed);
 
             if (distance > HandDistance * 0.5f && distance < HandDistance && currentKame == null)
             {
@@ -244,7 +255,7 @@ public class Magic : MonoBehaviour
             // _DistanceText.text = "launchSpeed: " + String.Format("{0:0.00}", launchSpeed);
             AudioSourceKame.Stop();
 
-            Utils.PlaySound(Launch,currentKame,this.transform, 1000);
+            Utils.PlaySound(Launch, currentKame, this.transform, 1000);
             float SpeedKame = Mathf.Lerp(0, shootMaxVelocity, launchSpeed);
             if (this.shootMinVelocity > SpeedKame)
             {

@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.000015861327, g: 0.000016308222, b: 0.000015861327,
+  m_IndirectSpecularColor: {r: 0.000017336237, g: 0.000017364291, b: 0.000017336237,
     a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
@@ -17754,7 +17754,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2620228222752084058}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.13, z: 0.27}
+  m_LocalPosition: {x: 0.08, y: -0.13, z: 0.28}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17779,7 +17779,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2620228223062821656
 Transform:
   m_ObjectHideFlags: 0
@@ -17869,7 +17869,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2620228223776721941}
   m_LocalRotation: {x: -0, y: -0.7071068, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: -0.13, z: 0.27}
+  m_LocalPosition: {x: -0.17, y: -0.13, z: 0.33}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -17894,7 +17894,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2620228224155571346
 Transform:
   m_ObjectHideFlags: 0
@@ -20747,9 +20747,9 @@ MonoBehaviour:
   _RotationGestoureAnchor: {fileID: 2620228223776721942}
   _MoveGestoureAnchor: {fileID: 2620228222752084059}
   _MoveScoreText: {fileID: 836978533}
-  rotationSpeed: 175
-  mainSpeed: 15
-  maxSpeed: 80
+  rotationSpeed: 750
+  mainSpeed: 50
+  maxSpeed: 180
   forceMagnitude: 2.5
 --- !u!82 &4968531031404869577
 AudioSource:
@@ -20922,6 +20922,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6823eeb31a3d67e4fac476852868ea5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  HeadAnchor: {fileID: 358702056}
   LeftKameAnchor: {fileID: 1791932313592041}
   RightKameAnchor: {fileID: 1008073498497217}
   LeftHandAnchor: {fileID: 432959205}

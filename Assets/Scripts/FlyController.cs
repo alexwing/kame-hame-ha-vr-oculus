@@ -53,15 +53,17 @@ public class FlyController : MonoBehaviour
     private void GestureRotation()
     {
         //float distance = Vector3.Distance(_leftHand.position, _RotationGestoureAnchor.position);
-         float distance = Vector3.Distance(new Vector3(_leftHand.position.x,0,0), new Vector3(_RotationGestoureAnchor.position.x,0,0));
+         float distance = Vector3.Distance(new Vector3(_leftHand.localPosition.x,0,0), new Vector3(_RotationGestoureAnchor.localPosition.x,0,0));
         float rotateInfluence;
 
         if (!Utils.IsFrontAtObject(_RotationGestoureAnchor, _leftHand))
         {
+            _MoveScoreText.text = "Rotation left: " + distance.ToString("F2");
             rotateInfluence = -distance * Time.deltaTime * rotationSpeed;
         }
         else
         {
+             _MoveScoreText.text = "Rotation right: " + distance.ToString("F2");
             rotateInfluence = +distance * Time.deltaTime * rotationSpeed;
         }
 
@@ -72,7 +74,7 @@ public class FlyController : MonoBehaviour
     {
 
         //float distance = Vector3.Distance(_rightHand.position, _MoveGestoureAnchor.position);
-        float distance = Vector3.Distance(new Vector3(0,0,_rightHand.position.z), new Vector3(0,0,_MoveGestoureAnchor.position.z));
+        float distance = Vector3.Distance(new Vector3(0,0,_rightHand.localPosition.z), new Vector3(0,0,_MoveGestoureAnchor.localPosition.z));
         float moveInfluence;
 
         if (Utils.IsFrontAtObject(_MoveGestoureAnchor, _rightHand))

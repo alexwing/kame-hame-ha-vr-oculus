@@ -396,6 +396,16 @@ public class Utils
             return false;
 
     }
+    public static bool IsFrontAtObject(Vector3 obj1, Vector3 obj2)
+    {
+        Transform obj1T = new GameObject().transform;
+        obj1T.position = obj1;
+        if (Vector3.Dot(Vector3.forward, obj1T.transform.InverseTransformPoint(obj2)) < 0)
+            return true;
+        else
+            return false;
+
+    }
 
 
     public static String GetWifiMAC()
@@ -486,7 +496,7 @@ public class Utils
         float normalizedValue = Mathf.InverseLerp(0, DistanceSoundLimit, cameraDistance);
         float explosionDistanceVolumen = Mathf.Lerp(1f, 0, normalizedValue);
         // First, calculate the direction to the spawn
-        Vector3 spawnDirection = collision.position - player.position;        
+        Vector3 spawnDirection = collision.position - player.position;
         // Then, normalize it into a unit vector
         Vector3 unitSpawnDirection = spawnDirection.normalized;
 
