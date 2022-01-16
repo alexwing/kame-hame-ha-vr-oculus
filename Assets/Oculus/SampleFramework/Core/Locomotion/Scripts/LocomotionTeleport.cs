@@ -244,7 +244,7 @@ public class LocomotionTeleport : MonoBehaviour
 	/// <summary>
 	/// The LocomotionController that is used by object to discover shared references.
 	/// </summary>
-	public LocomotionController LocomotionController { get; private set; }
+	public LocomotionHandsController LocomotionController { get; private set; }
 
 	/// <summary>
 	/// The aiming system uses a common function for testing collision with the world, which can be configured to use different
@@ -396,8 +396,10 @@ public class LocomotionTeleport : MonoBehaviour
 	/// <param name="enableRotation"></param>
 	private void EnableMotion(bool enableLinear, bool enableRotation)
 	{
-		LocomotionController.PlayerController.EnableLinearMovement = enableLinear;
-		LocomotionController.PlayerController.EnableRotation = enableRotation;
+
+		//	LocomotionController.PlayerController.EnableLinearMovement = enableLinear;
+		//	LocomotionController.PlayerController.EnableRotation = enableRotation;
+		
 	}
 
 	/// <summary>
@@ -406,7 +408,7 @@ public class LocomotionTeleport : MonoBehaviour
 	/// </summary>
 	private void Awake()
 	{
-		LocomotionController = GetComponent<LocomotionController>();
+		LocomotionController = GetComponent<LocomotionHandsController>();
 		CreateNewTeleportDestination();
 	}
 
