@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -492,6 +492,10 @@ public class Utils
 
     public static void PlaySound(AudioClip clip, Transform collision, Transform player, int DistanceSoundLimit)
     {
+        if (clip == null)
+        {
+            return;
+        }
         float cameraDistance = Vector3.Distance(player.position, collision.position);
         float normalizedValue = Mathf.InverseLerp(0, DistanceSoundLimit, cameraDistance);
         float explosionDistanceVolumen = Mathf.Lerp(1f, 0, normalizedValue);
@@ -500,7 +504,7 @@ public class Utils
         // Then, normalize it into a unit vector
         Vector3 unitSpawnDirection = spawnDirection.normalized;
 
-        // Debug.Log("Camera distance: " + cameraDistance + " explosion sound volumen : " + explosionDistanceVolumen);
+        //Debug.Log("Camera distance: " + cameraDistance + " explosion sound volumen : " + explosionDistanceVolumen);
         // Now, we can play the sound in the direction, but not position, of the spawn
         AudioSource.PlayClipAtPoint(clip, player.position + unitSpawnDirection, explosionDistanceVolumen);
     }
@@ -518,6 +522,116 @@ public class Utils
             sum += vec;
         }
         return sum / vectors.Length;
+    }
+
+
+
+    /// <summary>
+    /// Create ramdon postion from quad limits and list of others positions
+    /// </summary>
+    /// <param name="quad">quad</param>
+    /// <param name="otherPositions">otherPositions</param>
+    /// <param name="minimalDistanceBetween">minimalDistanceBetween</param>
+    /// <param name="retries">retries</param>
+    /// <returns>Return the randomized position</returns>
+    public static Vector3 CreateRamdomPosition(Vector4 quad, ref List<Vector3> otherPositions, float minimalDistanceBetween, int retries = 2000)
+    {
+        Vector3 position = new Vector3(0, 0, 0);
+        bool isInRange = false;
+        int retryCount = 0;
+        while (!isInRange)
+        {
+            isInRange = true;
+
+            //verify not in the same position with other hills with the hillSizeLimit
+            Vector3 auxPosition = new Vector3(0, 0, 0);
+            float auxDistance = 0;
+            position = new Vector3(UnityEngine.Random.Range(quad.x, quad.y), 0, UnityEngine.Random.Range(quad.z, quad.w));
+            for (int j = 0; j < otherPositions.Count; j++)
+            {
+                //verfiy not in the same position in hillSizeLimit range
+                float distance = Vector3.Distance(otherPositions[j], position);
+                if (distance < minimalDistanceBetween)
+                {
+                    isInRange = false;
+                    //if now position has a distance greater that before save in auxDistance
+                    if (distance > auxDistance)
+                    {
+                        auxDistance = distance;
+                        auxPosition = position;
+                    }
+                    //limit retry count
+                    if (retryCount > retries)
+                    {
+                        //restore element on more distance in retries
+                        position = auxPosition;
+
+                        isInRange = true;
+                       // Debug.LogWarning("Can't find a position for the hill with this hills Distance between: " + auxDistance);
+                    }
+                }
+            }
+            retryCount++;
+        }
+
+
+        otherPositions.Add(position);
+        return position;
+
+    }
+
+    public static Color Darken(Color color, float darkenAmount)
+    {
+        return Color.Lerp(color, Color.black, darkenAmount);
+
+    }
+
+    /// <summary>
+    ///  change the color of the object renderer copy instance
+    /// </summary>
+    /// <param name="painterObject">Renderer to paint</param>
+    /// <param name="color">Color to paint</param>
+    /// <param name="name">Shader variable</param>
+    /// <returns>none</returns>    
+    public static void ChangeColor(Renderer painterObject, Color color, string name = "_Color")
+    {
+        var propBlock = new MaterialPropertyBlock();
+        painterObject.GetPropertyBlock(propBlock);
+        propBlock.SetColor(name, color);
+        painterObject.SetPropertyBlock(propBlock);
+
+    }
+
+    public static bool DoubleClick()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            clicked++;
+            if (clicked == 1) clicktime = Time.time;
+        }
+        if (clicked > 1 && Time.time - clicktime < clickdelay)
+        {
+            clicked = 0;
+            clicktime = 0;
+            return true;
+        }
+        else if (clicked > 2 || Time.time - clicktime > 1) clicked = 0;
+        return false;
+    }
+
+    public static Texture2D FillColorAlpha(Texture2D tex2D, Color32? fillColor = null)
+    {   
+        if (fillColor ==null)
+        {
+            fillColor = Color.clear;
+        }
+        Color32[] fillPixels = new Color32[tex2D.width * tex2D.height];
+        for (int i = 0; i < fillPixels.Length; i++)
+        {
+            fillPixels[i] = (Color32) fillColor;
+        }
+        tex2D.SetPixels32(fillPixels);
+        return tex2D;
     }
 
 }
