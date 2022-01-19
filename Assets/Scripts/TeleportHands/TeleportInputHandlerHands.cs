@@ -65,14 +65,17 @@ public class TeleportInputHandlerHands : TeleportInputHandler
 			return LocomotionTeleport.TeleportIntentions.Aim;
 
 		}
-		if (teleport)
+		if (teleport && LocomotionTeleport.CurrentIntention == LocomotionTeleport.TeleportIntentions.Aim)
 		{
-			Debug.Log("TELEPORT ");
-			teleport = false;
-			if (LocomotionTeleport.CurrentIntention == LocomotionTeleport.TeleportIntentions.Aim)
-			{
-				return LocomotionTeleport.TeleportIntentions.Teleport;
-			}
+
+				Debug.Log("TELEPORT ");
+				aim = false;
+				teleport = false;
+				return LocomotionTeleport.TeleportIntentions.PreTeleport;
+        }
+        else
+        {
+			return global::LocomotionTeleport.TeleportIntentions.None;
 		}
 		Debug.Log("teleport OFF");
 		return global::LocomotionTeleport.TeleportIntentions.None;

@@ -8344,6 +8344,51 @@ MonoBehaviour:
             m_BoolArgument: 0
           m_CallState: 2
     active: 1
+  - name: Ok Left
+    fingerDatas:
+    - {x: -0.000000081777614, y: 0.00000014109432, z: 0.00000010481351}
+    - {x: -0.000000081777614, y: 0.00000014109432, z: 0.00000010481351}
+    - {x: 0.020069329, y: 0.011554046, z: 0.01049652}
+    - {x: 0.033654027, y: 0.014374372, z: 0.031115727}
+    - {x: 0.057837628, y: 0.017585628, z: 0.052608415}
+    - {x: 0.08560149, y: 0.017922759, z: 0.07187029}
+    - {x: 0.09599624, y: 0.007316485, z: 0.023550745}
+    - {x: 0.10161004, y: 0.044698842, z: 0.020466287}
+    - {x: 0.07746547, y: 0.04196889, z: 0.020967158}
+    - {x: 0.095646575, y: 0.002543211, z: 0.001725927}
+    - {x: 0.09706347, y: 0.045445748, z: 0.0020092316}
+    - {x: 0.06966094, y: 0.04456232, z: 0.004711015}
+    - {x: 0.08869365, y: 0.0065294877, z: -0.0174652}
+    - {x: 0.08788468, y: 0.045334615, z: -0.013696659}
+    - {x: 0.06184719, y: 0.04212407, z: -0.009468188}
+    - {x: 0.034073737, y: 0.009419568, z: -0.022998672}
+    - {x: 0.07789581, y: 0.013691187, z: -0.035054132}
+    - {x: 0.076694116, y: 0.043076273, z: -0.026176928}
+    - {x: 0.056917056, y: 0.0416895, z: -0.02176099}
+    - {x: 0.10132305, y: 0.017739177, z: 0.09081791}
+    - {x: 0.059133977, y: 0.029120103, z: 0.021319335}
+    - {x: 0.05203138, y: 0.027204558, z: 0.008252615}
+    - {x: 0.04800016, y: 0.022227068, z: -0.0068634814}
+    - {x: 0.045308996, y: 0.023143329, z: -0.019909948}
+    onRecognized:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1586140505}
+          m_TargetAssemblyTypeName: TeleportInputHandlerHands, Assembly-CSharp
+          m_MethodName: teleportOpened
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+    onRecognitionEnded:
+      m_PersistentCalls:
+        m_Calls: []
+    active: 1
   _GestureScoreText: {fileID: 102122846}
 --- !u!4 &1594308573
 Transform:
@@ -8586,10 +8631,34 @@ MonoBehaviour:
     - {x: -0.04519514, y: -0.0224999, z: 0.020672873}
     onRecognized:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1586140505}
+          m_TargetAssemblyTypeName: TeleportInputHandlerHands, Assembly-CSharp
+          m_MethodName: teleportOpened
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     onRecognitionEnded:
       m_PersistentCalls:
-        m_Calls: []
+        m_Calls:
+        - m_Target: {fileID: 1586140505}
+          m_TargetAssemblyTypeName: TeleportInputHandlerHands, Assembly-CSharp
+          m_MethodName: teleportClosed
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
     active: 0
   - name: Victoria
     fingerDatas:
@@ -8637,7 +8706,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 1586140505}
           m_TargetAssemblyTypeName: TeleportInputHandlerHands, Assembly-CSharp
-          m_MethodName: aimOpened
+          m_MethodName: aimClosed
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
