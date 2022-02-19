@@ -7,85 +7,96 @@ language governing permissions and limitations under the license.
 
 ************************************************************************************/
 
-using System;
 using UnityEngine;
-using System.Collections;
-using UnityEngine.Assertions;
+
 
 /// <summary>
 /// When this component is enabled, the player will be able to aim and trigger teleport behavior using Oculus Touch controllers.
 /// </summary>
 public class TeleportInputHandlerHands : TeleportInputHandler
 {
-	public Transform LeftHand;
-	public Transform RightHand;
+    public Transform LeftHand;
+    public Transform RightHand;
 
-	public static bool aim = false;
-	public static bool teleport = false;
+    public static bool aim = false;
+    public static bool teleport = false;
+    public static bool teleportLaunched = false;
 
 
-	public void aimClosed()
-	{
-		aim = false;
+    public void aimClosed()
+    {
+        aim = false;
 
-	}
-	public void aimOpened()
-	{
-		aim = true;
-	}
-	public void teleportClosed()
-	{
-		teleport = false;
+    }
+    public void aimOpened()
+    {
+        aim = true;
+    }
+    public void teleportClosed()
+    {
+        teleport = false;
+        teleportLaunched = false;
 
-	}
-	public void teleportOpened()
-	{
-		teleport = true;
-	}
+    }
+    public void teleportOpened()
+    {
+        teleport = true;
+        teleportLaunched = false;
+    }
 
     public void Update()
     {
-	
-	}
+
+    }
 
     /// <summary>
     /// Based on the input mode, controller state, and current intention of the teleport controller, return the apparent intention of the user.
     /// </summary>
     /// <returns></returns>
     public override LocomotionTeleport.TeleportIntentions GetIntention()
-	{
-		if (!isActiveAndEnabled)
-		{
-			return global::LocomotionTeleport.TeleportIntentions.None;
-		}
-		
-		if (aim)
-		{
-			Debug.Log("AIM teleport");
-			return LocomotionTeleport.TeleportIntentions.Aim;
+    {
+        if (!isActiveAndEnabled)
+        {
+            return global::LocomotionTeleport.TeleportIntentions.None;
+        }
+        if (aim && !teleportLaunched && teleport)
+        {
 
-		}
-		if (teleport && LocomotionTeleport.CurrentIntention == LocomotionTeleport.TeleportIntentions.Aim)
-		{
+            Debug.Log("TELEPORT ");
+            aim = false;
+            teleport = false;
+            teleportLaunched = true;
 
-				Debug.Log("TELEPORT ");
-				aim = false;
-				teleport = false;
-				return LocomotionTeleport.TeleportIntentions.PreTeleport;
+            /*LocomotionTeleport locomotionTeleport = GetComponent<LocomotionTeleport>();
+            if (locomotionTeleport != null)
+            {
+                    StartCoroutine(locomotionTeleport.AimStateCoroutine());
+            }*/
+            //	LocomotionTeleport.DoTeleport();
+
+            return LocomotionTeleport.TeleportIntentions.Teleport;
         }
         else
         {
-			return global::LocomotionTeleport.TeleportIntentions.None;
-		}
-		Debug.Log("teleport OFF");
-		return global::LocomotionTeleport.TeleportIntentions.None;
+            if (aim)
+            {
+                Debug.Log("AIM teleport");
+                return LocomotionTeleport.TeleportIntentions.Aim;
+            }
+            else
+            {
+                return LocomotionTeleport.TeleportIntentions.None;
+            }
 
 
-	}
+        }
+    }
+
 
     public override void GetAimData(out Ray aimRay)
     {
-		Transform t =  RightHand;
-		aimRay = new Ray(t.position, -t.right);
-	}
+        Transform t = RightHand;
+        aimRay = new Ray(t.position, -t.right);
+    }
 }
+

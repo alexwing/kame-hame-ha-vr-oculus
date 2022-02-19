@@ -166,6 +166,7 @@ public class LocomotionTeleport : MonoBehaviour
 	/// <param name="rotation"></param>
 	public void OnUpdateTeleportDestination(bool isValidDestination, Vector3? position, Quaternion? rotation, Quaternion? landingRotation)
 	{
+		Debug.Log("OnUpdateTeleportDestination" + isValidDestination);
 		if (UpdateTeleportDestination != null)
 		{
 			UpdateTeleportDestination(isValidDestination, position, rotation, landingRotation);
@@ -561,12 +562,15 @@ public class LocomotionTeleport : MonoBehaviour
 
 		// If target is valid, enter pre-teleport otherwise cancel the teleport.
 		LogState("AimState: Switch state. Intention: " + CurrentIntention);
+		Debug.Log("AimState: Switch state. Intention: " + CurrentIntention + " TargetValid: " + _teleportDestination.IsValidDestination);
 		if ((CurrentIntention == TeleportIntentions.PreTeleport || CurrentIntention == TeleportIntentions.Teleport) && _teleportDestination.IsValidDestination)
 		{
+			Debug.Log ("AimState: PreTeleport");
 			StartCoroutine(PreTeleportStateCoroutine());
 		}
 		else
 		{
+			Debug.Log ("AimState: CancelAim");
 			StartCoroutine(CancelAimStateCoroutine());
 		}
 	}
